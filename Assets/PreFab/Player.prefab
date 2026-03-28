@@ -12,9 +12,11 @@ GameObject:
   - component: {fileID: 2244349389981629988}
   - component: {fileID: 6162478811457859564}
   - component: {fileID: 2303801322748373981}
-  m_Layer: 0
+  - component: {fileID: 1433632756261950835}
+  - component: {fileID: 6193627085250447896}
+  m_Layer: 6
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -28,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 6391306229400442132}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 15.16, y: 1.72, z: -38.65}
+  m_LocalPosition: {x: 15, y: 1.72, z: -38.47}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -114,3 +116,155 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &1433632756261950835
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6391306229400442132}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 80
+  m_CollisionDetection: 0
+--- !u!114 &6193627085250447896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6391306229400442132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58b01bea8584a024d9e6ca78d50cc214, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerController
+  maxHP: 100
+  currentHP: 0
+  keyCount: 0
+  attackDamage: 20
+  baseSpeed: 10
+  sprintSpeed: 20
+  currentSpeed: 0
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  weaponRange: 50
+  moveAction:
+    m_Name: Move
+    m_Type: 0
+    m_ExpectedControlType: Vector2
+    m_Id: 15712455-d8c4-4a0a-9245-a708a9d9b530
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 2D Vector
+      m_Id: a3d10209-0d50-44fe-be49-a79463c4e786
+      m_Path: 2DVector
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Move
+      m_Flags: 4
+    - m_Name: up
+      m_Id: b832dfe7-6a17-4c5b-a0b3-47ce7271721b
+      m_Path: <Keyboard>/w
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Move
+      m_Flags: 8
+    - m_Name: down
+      m_Id: 55b74fc0-2738-4bef-b8ad-d38ae0edc3a1
+      m_Path: <Keyboard>/s
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Move
+      m_Flags: 8
+    - m_Name: left
+      m_Id: 89e5747c-60ee-4f9c-9741-e6ec4bdd61c8
+      m_Path: <Keyboard>/a
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Move
+      m_Flags: 8
+    - m_Name: right
+      m_Id: 9e49d5a6-8079-48da-bdba-aeef8fdbd412
+      m_Path: <Keyboard>/d
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Move
+      m_Flags: 8
+    m_Flags: 0
+  aimAction:
+    m_Name: Aim
+    m_Type: 0
+    m_ExpectedControlType: Vector2
+    m_Id: ecc59f91-1878-4b5e-8469-a2c9f841ece1
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: c80d8562-e101-4ace-b940-cbe1ffcdcdf1
+      m_Path: <Mouse>/position
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Aim
+      m_Flags: 0
+    m_Flags: 0
+  shootAction:
+    m_Name: Shoot
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: bb4cd50a-7331-4e62-92ee-caaa9818d759
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 8a5ac5db-88ea-4c77-979a-b258808d3693
+      m_Path: <Mouse>/leftButton
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Shoot
+      m_Flags: 0
+    m_Flags: 0
+  sprintAction:
+    m_Name: Sprint
+    m_Type: 1
+    m_ExpectedControlType: Button
+    m_Id: 80a3bad6-b869-4782-8ad4-f3f5ec91eee5
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 19d1684e-dfc7-4ed9-a7e7-b6aa1acee9e5
+      m_Path: <Keyboard>/leftShift
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Sprint
+      m_Flags: 0
+    m_Flags: 0
+  nextLevelName: Level 2
+  requiredKeysToExit: 1

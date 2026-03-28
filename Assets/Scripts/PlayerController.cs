@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Movement")]
     public float baseSpeed = 5f;
+    public float sprintSpeed = 8f; // 🏃‍♂️ เพิ่มความเร็วตอนวิ่ง
     [HideInInspector] public float currentSpeed;
 
     [Header("Aiming (Raycast)")]
@@ -26,6 +27,7 @@ public class PlayerController : MonoBehaviour
     public InputAction moveAction;
     public InputAction aimAction;
     public InputAction shootAction;
+    public InputAction sprintAction; // 🏃‍♂️ เพิ่ม Action สำหรับปุ่มวิ่ง
 
     [Header("Level Exit")]
     public string nextLevelName = "Level 2";
@@ -45,6 +47,7 @@ public class PlayerController : MonoBehaviour
         moveAction.Enable();
         aimAction.Enable();
         shootAction.Enable();
+        sprintAction.Enable(); // 🏃‍♂️ เปิดใช้งาน Action
     }
 
     void OnDisable()
@@ -52,17 +55,33 @@ public class PlayerController : MonoBehaviour
         moveAction.Disable();
         aimAction.Disable();
         shootAction.Disable();
+        sprintAction.Disable(); // 🏃‍♂️ ปิดใช้งาน Action
     }
 
     void Update()
     {
         HandleAiming();
+        HandleSprint(); // 🏃‍♂️ เรียกใช้ฟังก์ชันเช็กการวิ่ง
         if (shootAction.WasPressedThisFrame()) Shoot();
     }
 
     void FixedUpdate()
     {
         HandleMovement();
+    }
+
+    // 🏃‍♂️ ฟังก์ชันจัดการความเร็ว
+    private void HandleSprint()
+    {
+        // IsPressed() จะเป็นจริงตลอดเวลาที่ปุ่มถูกกดค้างไว้
+        if (sprintAction.IsPressed())
+        {
+            currentSpeed = sprintSpeed;
+        }
+        else
+        {
+            currentSpeed = baseSpeed;
+        }
     }
 
     private void HandleMovement()
@@ -74,7 +93,6 @@ public class PlayerController : MonoBehaviour
 
     private void HandleAiming()
     {
-        // 1. Aim at ground with mouse
         Ray ray = mainCam.ScreenPointToRay(aimAction.ReadValue<Vector2>());
         if (Physics.Raycast(ray, out RaycastHit groundHit, 100f, groundLayer))
         {
@@ -83,10 +101,8 @@ public class PlayerController : MonoBehaviour
             transform.LookAt(targetPoint);
         }
 
-        // 2. Set origin up by 1 unit and forward by 1 unit to avoid self-collision
         Vector3 shootOrigin = transform.position + new Vector3(0, 1f, 0) + (transform.forward * 1f);
 
-        // 3. Detect Enemy
         if (Physics.Raycast(shootOrigin, transform.forward, out RaycastHit hit, weaponRange))
         {
             if (hit.collider.CompareTag("Enemy"))
@@ -113,13 +129,11 @@ public class PlayerController : MonoBehaviour
 
     private void Shoot()
     {
-        // TryGetComponent is a cleaner and safer way to check and get components
         if (currentTarget != null && currentTarget.TryGetComponent<Enemy>(out Enemy enemyScript))
         {
             enemyScript.TakeDamage(attackDamage);
             int remainingHP = Mathf.Max(0, enemyScript.hp);
 
-            // Clean inline condition for the status message
             string status = remainingHP > 0 ? $"Remaining HP: {remainingHP}" : "Enemy is Dead!";
             Debug.Log($"Hit {currentTarget.name}! Damage: {attackDamage} | {status}");
         }
