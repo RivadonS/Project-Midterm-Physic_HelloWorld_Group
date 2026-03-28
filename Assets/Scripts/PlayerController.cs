@@ -34,10 +34,8 @@ public class PlayerController : MonoBehaviour
     void Awake()
     {
         Time.timeScale = 1f;
-
         rb = GetComponent<Rigidbody>();
         mainCam = Camera.main;
-
         currentHP = maxHP;
         currentSpeed = baseSpeed;
     }
@@ -59,11 +57,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         HandleAiming();
-
-        if (shootAction.triggered)
-        {
-            Shoot();
-        }
+        if (shootAction.WasPressedThisFrame()) Shoot();
     }
 
     void FixedUpdate()
@@ -80,45 +74,54 @@ public class PlayerController : MonoBehaviour
 
     private void HandleAiming()
     {
-        Vector2 mousePosition = aimAction.ReadValue<Vector2>();
-        Ray ray = mainCam.ScreenPointToRay(mousePosition);
-
+        // 1. Aim at ground with mouse
+        Ray ray = mainCam.ScreenPointToRay(aimAction.ReadValue<Vector2>());
         if (Physics.Raycast(ray, out RaycastHit groundHit, 100f, groundLayer))
         {
             Vector3 targetPoint = groundHit.point;
             targetPoint.y = transform.position.y;
             transform.LookAt(targetPoint);
         }
-        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, weaponRange))
+
+        // 2. Set origin up by 1 unit and forward by 1 unit to avoid self-collision
+        Vector3 shootOrigin = transform.position + new Vector3(0, 1f, 0) + (transform.forward * 1f);
+
+        // 3. Detect Enemy
+        if (Physics.Raycast(shootOrigin, transform.forward, out RaycastHit hit, weaponRange))
         {
             if (hit.collider.CompareTag("Enemy"))
             {
-                currentTarget = hit.collider.gameObject;
-                Debug.DrawRay(transform.position, transform.forward * hit.distance, Color.red);
+                if (currentTarget != hit.collider.gameObject)
+                {
+                    currentTarget = hit.collider.gameObject;
+                    Debug.Log($"🎯 Target locked: {currentTarget.name}");
+                }
+                Debug.DrawRay(shootOrigin, transform.forward * hit.distance, Color.red);
             }
             else
             {
                 currentTarget = null;
-                Debug.DrawRay(transform.position, transform.forward * hit.distance, Color.darkGreen);
+                Debug.DrawRay(shootOrigin, transform.forward * hit.distance, Color.darkGreen);
             }
         }
         else
         {
             currentTarget = null;
-            Debug.DrawRay(transform.position, transform.forward * weaponRange, Color.white);
+            Debug.DrawRay(shootOrigin, transform.forward * weaponRange, Color.white);
         }
     }
 
     private void Shoot()
     {
-        if (currentTarget != null)
+        // TryGetComponent is a cleaner and safer way to check and get components
+        if (currentTarget != null && currentTarget.TryGetComponent<Enemy>(out Enemy enemyScript))
         {
-            Enemy enemyScript = currentTarget.GetComponent<Enemy>();
-            if (enemyScript != null)
-            {
-                enemyScript.TakeDamage(attackDamage);
-                Debug.Log($"Hit {currentTarget.name} Damage: {attackDamage}");
-            }
+            enemyScript.TakeDamage(attackDamage);
+            int remainingHP = Mathf.Max(0, enemyScript.hp);
+
+            // Clean inline condition for the status message
+            string status = remainingHP > 0 ? $"Remaining HP: {remainingHP}" : "Enemy is Dead!";
+            Debug.Log($"Hit {currentTarget.name}! Damage: {attackDamage} | {status}");
         }
         else
         {
@@ -143,7 +146,7 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                Debug.Log($"Have {keyCount}/{requiredKeysToExit} keys");
+                Debug.Log($"Need more keys! Have {keyCount}/{requiredKeysToExit} keys.");
             }
         }
     }

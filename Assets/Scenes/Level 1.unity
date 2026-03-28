@@ -143,6 +143,29 @@ MonoBehaviour:
   detectionLayers:
     serializedVersion: 2
     m_Bits: 64
+--- !u!136 &21977905
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 21977902}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2.015345
+  m_Direction: 1
+  m_Center: {x: 0, y: 1.1, z: 0}
 --- !u!1 &77895754
 GameObject:
   m_ObjectHideFlags: 0
@@ -3622,6 +3645,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy_Stand
       objectReference: {fileID: 0}
+    - target: {fileID: 4114708487494394210, guid: ce0f0e49fa8a6a942bba41e270459c54, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
     - target: {fileID: 5178018479593732390, guid: ce0f0e49fa8a6a942bba41e270459c54, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -3662,13 +3689,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6606662895906646380, guid: ce0f0e49fa8a6a942bba41e270459c54, type: 3}
+    - {fileID: 8486981467478204566, guid: ce0f0e49fa8a6a942bba41e270459c54, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 4114708487494394210, guid: ce0f0e49fa8a6a942bba41e270459c54, type: 3}
       insertIndex: -1
       addedObject: {fileID: 21977903}
+    - targetCorrespondingSourceObject: {fileID: 4114708487494394210, guid: ce0f0e49fa8a6a942bba41e270459c54, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 21977905}
   m_SourcePrefab: {fileID: 100100000, guid: ce0f0e49fa8a6a942bba41e270459c54, type: 3}
 --- !u!1001 &3075816996519316405
 PrefabInstance:
@@ -4097,7 +4129,15 @@ MonoBehaviour:
     m_Id: bb4cd50a-7331-4e62-92ee-caaa9818d759
     m_Processors: 
     m_Interactions: 
-    m_SingletonActionBindings: []
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 8a5ac5db-88ea-4c77-979a-b258808d3693
+      m_Path: <Mouse>/leftButton
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Shoot
+      m_Flags: 0
     m_Flags: 0
   nextLevelName: Level 2
   requiredKeysToExit: 1

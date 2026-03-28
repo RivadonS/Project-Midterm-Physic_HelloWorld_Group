@@ -1,6 +1,5 @@
 using UnityEngine;
 
-// ตรวจสอบให้แน่ใจว่าศัตรูมี Collider ติดอยู่เสมอ
 [RequireComponent(typeof(Collider))]
 public class Enemy : MonoBehaviour
 {
